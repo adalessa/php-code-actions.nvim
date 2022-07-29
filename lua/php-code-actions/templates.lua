@@ -10,16 +10,27 @@ local function isNullable(nullable)
     return ""
 end
 
-local function getReturnTypes(nullable, types) if #types > 0 then
+local function getReturnTypes(nullable, types)
+    if #types > 0 then
         return string.format(": %s%s", isNullable(nullable), table.concat(types, "|"))
     end
     return ""
 end
 
-local function getTypeHint(nullable, types) if #types > 0 then
+local function getTypeHint(nullable, types)
+    if #types > 0 then
         return string.format("%s%s ", isNullable(nullable), table.concat(types, "|"))
     end
     return ""
+end
+
+local function getTypeHintForComment(nullable, types)
+    local comment_types = utils.table_copy(types)
+    if nullable then
+        table.insert(comment_types,"null")
+    end
+
+    return table.concat(comment_types, "|")
 end
 
 M.getGetter = function(property, nullable, types, have_dock_block)
@@ -30,8 +41,8 @@ M.getGetter = function(property, nullable, types, have_dock_block)
     /**
      * @return %s
      */
-]],
-            table.concat(types, "|")
+]]           ,
+            getTypeHintForComment(nullable, types)
         )
     end
 
@@ -40,7 +51,7 @@ M.getGetter = function(property, nullable, types, have_dock_block)
     public function get%s()%s
     {
         return $this->%s;
-    }]]   ,
+    }]]  ,
         utils.ucfirst(property),
         getReturnTypes(nullable, types),
         property
@@ -50,7 +61,6 @@ M.getGetter = function(property, nullable, types, have_dock_block)
 end
 
 M.getSetter = function(property, nullable, types, have_dock_block)
-
     local comment = ""
     if have_dock_block and #types > 0 then
         comment = string.format(
@@ -58,10 +68,10 @@ M.getSetter = function(property, nullable, types, have_dock_block)
     /**
      * @param %s $%s
      *
-     * @return self
+     * @return $this
      */
-]],
-            table.concat(types, "|"),
+]]           ,
+            getTypeHintForComment(nullable, types),
             property
         )
     end
@@ -72,7 +82,7 @@ M.getSetter = function(property, nullable, types, have_dock_block)
         $this->%s = $%s;
 
         return $this;
-    }]]   ,
+    }]]  ,
         utils.ucfirst(property),
         getTypeHint(nullable, types),
         property,

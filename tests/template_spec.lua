@@ -26,4 +26,40 @@ describe("Test templates for getter and setter", function ()
             },
             templates.getSetter("var", false, {"int"}, false))
     end)
+
+    it("Generate Setter with nullable field and comments", function ()
+        local templates = require("php-code-actions.templates")
+        assert.are.same(
+            {
+                "",
+                "    /**",
+                "     * @param int|null $var",
+                "     *",
+                "     * @return $this",
+                "     */",
+                "    public function setVar(?int $var): self",
+                "    {",
+                "        $this->var = $var;",
+                "",
+                "        return $this;",
+                "    }"
+            },
+            templates.getSetter("var", true, {"int"}, true))
+    end)
+
+    it("Generate Getter with nullable field and comments", function ()
+        local templates = require("php-code-actions.templates")
+        assert.are.same(
+            {
+                "",
+                "    /**",
+                "     * @return int|null",
+                "     */",
+                "    public function getVar(): ?int",
+                "    {",
+                "        return $this->var;",
+                "    }"
+            },
+            templates.getGetter("var", true, {"int"}, true))
+    end)
 end)
