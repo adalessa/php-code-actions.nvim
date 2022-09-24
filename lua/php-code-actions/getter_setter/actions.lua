@@ -1,5 +1,7 @@
 local ts_utils = require("nvim-treesitter.ts_utils")
-local templates = require("php-code-actions.templates")
+local templates = require("php-code-actions.getter_setter.templates")
+
+require("php-code-actions.getter_setter.queries")
 
 local get_node_text = vim.treesitter.get_node_text
 
