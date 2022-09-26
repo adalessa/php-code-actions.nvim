@@ -1,6 +1,6 @@
 describe("Test templates for getter and setter", function ()
     it("Test getter", function ()
-        local templates = require("php-code-actions.templates")
+        local templates = require("php-code-actions.getter_setter.templates")
         assert.are.same(
             {
                 "",
@@ -13,7 +13,7 @@ describe("Test templates for getter and setter", function ()
     end)
 
     it("Test Setter", function ()
-        local templates = require("php-code-actions.templates")
+        local templates = require("php-code-actions.getter_setter.templates")
         assert.are.same(
             {
                 "",
@@ -28,7 +28,7 @@ describe("Test templates for getter and setter", function ()
     end)
 
     it("Generate Setter with nullable field and comments", function ()
-        local templates = require("php-code-actions.templates")
+        local templates = require("php-code-actions.getter_setter.templates")
         assert.are.same(
             {
                 "",
@@ -48,7 +48,7 @@ describe("Test templates for getter and setter", function ()
     end)
 
     it("Generate Getter with nullable field and comments", function ()
-        local templates = require("php-code-actions.templates")
+        local templates = require("php-code-actions.getter_setter.templates")
         assert.are.same(
             {
                 "",
