@@ -2,6 +2,7 @@ local null_ls = require("null-ls")
 local utils = require("php-code-actions.utils")
 local getter_setter_actions = require("php-code-actions.getter_setter.actions")
 local file_creator_actions = require("php-code-actions.file_creator.actions")
+local file_creator_templates = require("php-code-actions.file_creator.templates")
 
 local M = {}
 
@@ -41,7 +42,15 @@ M.file_creator = {
     filetypes = { "php" },
     generator = {
         fn = function ()
-            return file_creator_actions
+            local actions = {}
+            for name, _ in pairs(file_creator_templates) do
+                table.insert(actions, {
+                    title = string.format("Create %s", name),
+                    action = file_creator_actions.create(name)
+                })
+            end
+
+            return actions
         end
     }
 }

@@ -61,28 +61,49 @@ end
 
 local actions = {}
 
-for name, _ in pairs(templates) do
-    table.insert(actions, {
-        title = string.format("Create %s", name),
-        action = function()
-            vim.ui.input({ prompt = "Name: " }, function(file_name)
-                if name == nil then
-                    return
-                end
+-- for name, _ in pairs(templates) do
+--     table.insert(actions, {
+--         title = string.format("Create %s", name),
+--         action = function()
+--             vim.ui.input({ prompt = "Name: " }, function(file_name)
+--                 if file_name == nil then
+--                     return
+--                 end
 
-                vim.ui.input({
-                    prompt = "Namespace: ",
-                    default = composer.namespace(),
-                }, function(namespace)
+--                 vim.ui.input({
+--                     prompt = "Namespace: ",
+--                     default = composer.namespace(),
+--                 }, function(namespace)
+--                     if namespace == nil then
+--                         return
+--                     end
+
+--                     return create(name, file_name, namespace)
+--                 end)
+--             end)
+--         end,
+--     })
+-- end
+
+actions.create = function (name)
+    return function ()
+        vim.ui.input({ prompt = "Name: " }, function(file_name)
+            if file_name == nil then
+                return
+            end
+
+            vim.ui.input({
+                prompt = "Namespace: ",
+                default = composer.namespace(),
+            }, function(namespace)
                     if namespace == nil then
                         return
                     end
 
                     return create(name, file_name, namespace)
                 end)
-            end)
-        end,
-    })
+        end)
+    end
 end
 
 return actions
