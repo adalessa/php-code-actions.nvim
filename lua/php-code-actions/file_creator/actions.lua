@@ -31,7 +31,7 @@ end
 
 local function get_directory(namespace)
 	namespace = ensure_final_slash(namespace)
-	local autoloads = composer.query({ "autoload", "psr-4" })
+	local autoloads = composer.query_composer_file({ "autoload", "psr-4" })
 	local directory = ""
 	for key, value in pairs(autoloads) do
 		if string.find(namespace, key) then
@@ -70,7 +70,7 @@ actions.create = function(name)
 
 			vim.ui.input({
 				prompt = "Namespace: ",
-				default = composer.namespace(),
+				default = composer.resolve_php_namespace(),
 			}, function(namespace)
 				if namespace == nil then
 					return
